@@ -1,0 +1,4 @@
+click>=8.0.0
+python-docx>=0.8.10
+selenium>=4.0.0
+undetected-chromedriver>=3.0.0
