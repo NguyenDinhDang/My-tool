@@ -103,5 +103,5 @@ flowchart TD
 Chay convert:
 
 ```bash
-python agi.py md2word samples/mermaid_sample.md
+python toolkit.py md2word samples/mermaid_sample.md
 ```

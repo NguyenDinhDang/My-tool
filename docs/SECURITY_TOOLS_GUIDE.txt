@@ -1,0 +1,208 @@
+# Source Code Security Analyzer - Hướng dẫn sử dụng
+
+## 1. CÁCH CHẠY SCANNER
+
+### Cú pháp cơ bản:
+```bash
+python src/security/source_code_analyzer.py <duong-dan-thu-muc>
+```
+
+### Ví dụ:
+```bash
+# Scan thư mục hiện tại
+python src/security/source_code_analyzer.py .
+
+# Scan thư mục cụ thể
+python src/security/source_code_analyzer.py C:\MyProject
+
+# Scan từ đường dẫn tương đối
+python src/security/source_code_analyzer.py ..\..\src
+```
+
+## 2. KẾT QUẢ SCANNER
+
+Sau khi chạy, bạn sẽ nhận được:
+
+### 2.1 Báo cáo trong terminal:
+- **Statistics**: Số lượng vấn đề theo mức độ (CRITICAL, HIGH, MEDIUM, LOW)
+- **Top Issues**: Danh sách top lỗ hổng được phát hiện
+- **Most Problematic Files**: 10 file có nhiều vấn đề nhất
+
+### 2.2 File báo cáo JSON:
+```
+sast_report.json
+```
+Chứa tất cả chi tiết về các lỗ hổng (có thể mở với text editor hoặc Excel)
+
+## 3. CÁC LOẠI LỖ HỔNG ĐƯỢC PHÁT HIỆN
+
+### CRITICAL (Nguy hiểm nhất):
+- **SQL Injection**: Lỗi ghép string vào SQL query
+- **Command Injection**: Lỗi chạy system commands với user input
+- **Hardcoded Secrets**: Mật khẩu, API key, token được hardcode trong code
+- **Insecure Deserialization**: Deserialize dữ liệu không tin cậy (pickle, unserialize)
+
+### HIGH (Nguy hiểm):
+- **XSS (Cross-Site Scripting)**: Lỗi innerHTML, eval(), dangerouslySetInnerHTML
+- **Path Traversal**: Lỗi truy cập file với user input
+- **XXE (XML External Entity)**: Lỗi XML parser
+
+### MEDIUM (Cẩn thận):
+- **Weak Crypto**: Sử dụng MD5, SHA1, DES (mã hóa yếu)
+- **CSRF**: POST routes không có CSRF protection
+- **Information Disclosure**: Debug mode enabled, stack traces
+
+## 4. CÁCH ĐỌC BÁO CÁO
+
+### Terminal Output Example:
+```
+[1] Hardcoded secrets/credentials
+    File: test_vulnerable.py:12
+    Issue: Hardcoded password
+    Code: database_password = "MySecurePassword123"
+```
+
+Giải thích:
+- **[1]**: Số thứ tự vấn đề
+- **Hardcoded secrets/credentials**: Loại lỗ hổng
+- **File**: test_vulnerable.py:12 = File "test_vulnerable.py" dòng 12
+- **Issue**: Mô tả lỗi cụ thể
+- **Code**: Dòng code bị lỗi
+
+### JSON Report Structure:
+```json
+{
+  "project_path": ".",
+  "files_scanned": 4,
+  "total_issues": 66,
+  "summary": {
+    "critical": 7,
+    "high": 7,
+    "medium": 52,
+    "low": 0
+  },
+  "vulnerabilities": [
+    {
+      "type": "hardcoded_secrets",
+      "severity": "CRITICAL",
+      "description": "Hardcoded secrets/credentials",
+      "detail": "Hardcoded password",
+      "file": "test_vulnerable.py",
+      "line": 12,
+      "code": "database_password = \"MySecurePassword123\""
+    }
+  ]
+}
+```
+
+## 5. CÁC FILE ĐƯỢC QUÉT
+
+Scanner sẽ quét các file code sau:
+- Python: .py
+- JavaScript: .js, .jsx, .ts, .tsx
+- PHP: .php
+- Java: .java
+- Ruby: .rb
+- Go: .go
+- C#: .cs
+- C/C++: .cpp, .c, .h
+- Vue: .vue
+- SQL: .sql
+- Shell: .sh, .bash
+
+## 6. CÁC THƯMỤC ĐƯỢC BỎ QUA
+
+Những thư mục này sẽ không được scan (giúp tăng tốc độ):
+- node_modules (npm packages)
+- venv, env (Python virtual environments)
+- .git (Git repository)
+- __pycache__ (Python cache)
+- dist, build (Build artifacts)
+- vendor (Composer packages)
+
+## 7. VÍ DỤ: SCAN TOÀN BỘ PROJECT
+
+```bash
+cd C:\MyProject
+python C:\path\to\src\security\source_code_analyzer.py .
+```
+
+Output:
+```
+========================================
+  Source Code Security Analyzer v1.0
+  Static Application Security Testing
+========================================
+
+[*] Scanning project: .
+[i] Found 125 code files
+[+] Scanned 125 files
+
+[*] Checking dependencies...
+[*] Checking configuration files...
+
+======================================================================
+SECURITY ANALYSIS REPORT
+======================================================================
+
+Project: .
+Files scanned: 125
+Issues found: 45
+
+======================================================================
+CRITICAL - 3 issues
+======================================================================
+
+[1] SQL Injection
+    File: user_service.py:45
+    Issue: String concatenation trong SQL query
+    Code: query = "SELECT * FROM users WHERE id = " + user_id
+
+[+] JSON Report saved: sast_report.json
+
+RECOMMENDATIONS
+1. Fix all CRITICAL issues immediately
+2. Review and fix HIGH issues in this sprint
+...
+```
+
+## 8. HÀNH ĐỘNG TIẾP THEO
+
+### Nếu tìm được lỗ hổng:
+
+1. **CRITICAL Issues**: Sửa ngay lập tức (nguy hiểm cao)
+2. **HIGH Issues**: Sửa trong sprint hiện tại
+3. **MEDIUM/LOW Issues**: Lập kế hoạch sửa
+
+### Cách sửa:
+- **SQL Injection**: Dùng Prepared Statements
+- **Command Injection**: Tránh shell=True, dùng subprocess.run()
+- **Hardcoded Secrets**: Dùng environment variables hoặc config files
+- **XSS**: Escape output, không dùng innerHTML
+- **Weak Crypto**: Dùng bcrypt, argon2, AES thay vì MD5/SHA1
+
+## 9. BONUS: TÍCH HỢP VÀO CI/CD
+
+### GitHub Actions example:
+```yaml
+- name: Run Security Scanner
+  run: |
+    pip install colorama beautifulsoup4
+    python src/security/source_code_analyzer.py .
+```
+
+### GitLab CI example:
+```yaml
+security_scan:
+  stage: test
+  script:
+    - pip install colorama beautifulsoup4
+    - python src/security/source_code_analyzer.py .
+  artifacts:
+    reports:
+      sast: sast_report.json
+```
+
+---
+
+**Chú ý**: Đây là static analysis tool, nó scan patterns trong code, không phải runtime testing. Cần kiểm tra thủ công để xác nhận.

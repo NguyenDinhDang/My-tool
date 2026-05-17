@@ -1,8 +1,8 @@
 ﻿#!/usr/bin/env python
 """
-AGI Quick Start Guide
+Security Automation Toolkit Quick Start Guide
 
-A simple interactive setup wizard for the AGI CLI tool.
+A simple interactive setup wizard for the toolkit.
 Run this to get started quickly!
 """
 
@@ -12,13 +12,13 @@ import click
 
 
 def show_banner():
-    """Display AGI banner"""
+    """Display toolkit banner"""
     banner = """
     
                                                                
-                   AGI - Quick Start Setup Guide               
+                   Security Automation Toolkit                 
                                                                
-               Automation & Conversion CLI Tool v1.0           
+               Security, Automation & Conversion Tools v1.0    
                                                                
     
     """
@@ -64,19 +64,19 @@ def show_usage_examples():
     
     
     1  Convert Markdown to Word:
-        python agi_cli.py md2word document.md
-        python agi_cli.py md2word document.md -o output.docx
+        python toolkit.py md2word document.md
+        python toolkit.py md2word document.md -o output.docx
     
     2  Auto-Fill Google Form:
-        python agi_cli.py autofill
-        python agi_cli.py autofill -n 50
+        python toolkit.py autofill
+        python toolkit.py autofill -n 50
     
     3  View Available Tools:
-        python agi_cli.py info
+        python toolkit.py info
     
     4  Get Help:
-        python agi_cli.py --help
-        python agi_cli.py [command] --help
+        python toolkit.py --help
+        python toolkit.py [command] --help
     
     """
     click.echo(examples)
@@ -88,7 +88,7 @@ def show_quick_demo():
     click.echo("\n")
     
     if click.confirm("Would you like to test the MD2Word converter with sample.md?"):
-        os.system("python agi_cli.py md2word sample.md")
+        os.system("python toolkit.py md2word samples/mermaid_sample.md")
         click.echo("\n Demo complete! Check sample.docx")
 
 
@@ -104,13 +104,13 @@ def show_next_steps():
     2. Customize settings in: config.py
     
     3. Try the first command:
-       python agi_cli.py info
+       python toolkit.py info
     
     4. For detailed help:
-       python agi_cli.py --help
+       python toolkit.py --help
     
     5. Create a custom markdown file and convert it:
-       python agi_cli.py md2word your_file.md
+       python toolkit.py md2word your_file.md
     
     
     
@@ -122,7 +122,7 @@ def show_next_steps():
 
 @click.command()
 def main():
-    """AGI Quick Start Wizard"""
+    """Security Automation Toolkit Quick Start Wizard"""
     show_banner()
     
     check_dependencies()

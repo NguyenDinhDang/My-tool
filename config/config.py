@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 """
-AGI Configuration File
+Security Automation Toolkit configuration file
 
-This file contains customizable settings for the AGI tools.
+This file contains customizable settings for the toolkit.
 Modify these values according to your needs.
 """
 
@@ -71,12 +71,12 @@ AUTOFILL_SETTINGS = {
 LOGGING_SETTINGS = {
     "verbose": True,
     "save_logs": False,
-    "log_file": "agi.log",
+    "log_file": "toolkit.log",
 }
 
 
 if __name__ == "__main__":
-    print("AGI Configuration Module")
+    print("Security Automation Toolkit Configuration Module")
     print("=" * 50)
     print(f"MD2Word Settings: {len(MD2WORD_SETTINGS)} options")
     print(f"AutoFill Settings: {len(AUTOFILL_SETTINGS)} options")

@@ -1,23 +1,18 @@
-# AGI CLI
+# Security Automation Toolkit
 
-AGI CLI la bo cong cu dong lenh gom cac tien ich tu dong hoa va chuyen doi tai lieu. Du an hien co hai tinh nang chinh: chuyen file Markdown sang Word va tu dong dien Google Form khi ban co quyen thuc hien.
+Bo cong cu Python cho cac tac vu kiem tra bao mat co uy quyen, chuyen doi tai lieu va tu dong hoa noi bo.
 
 ## Tinh Nang
 
-- Chuyen Markdown sang Word `.docx`
-- Ho tro heading, bang, danh sach, link, blockquote, code block va Mermaid diagram
-- Tu dong dien Google Form bang Selenium va undetected-chromedriver
-- Co launcher Windows `agi.bat` va file chay truc tiep `agi.py`
+- Phan tich ma nguon tinh de tim dau hieu loi bao mat.
+- Quet bao mat web co ban/nang cao cho website duoc phep kiem thu.
+- Phan tich WiFi trong moi truong lab.
+- Chuyen file Markdown sang Word `.docx`, co ho tro bang, code block va Mermaid.
+- Tu dong dien Google Form khi ban co quyen thuc hien.
 
 ## Cai Dat
 
-Yeu cau Python 3.7 tro len.
-
-```bash
-pip install -r requirements.txt
-```
-
-Neu dung moi truong ao:
+Yeu cau Python 3.10 tro len.
 
 ```bash
 python -m venv .venv
@@ -25,99 +20,70 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Cach Dung
-
-Chay tu thu muc goc cua du an:
+## Cach Dung Nhanh
 
 ```bash
-python agi.py --help
+python toolkit.py --help
+python toolkit.py info
 ```
 
-Hoac dung launcher tren Windows:
+Chuyen Markdown sang Word:
 
 ```bash
-.\agi.bat --help
+python toolkit.py md2word samples/mermaid_sample.md
+python toolkit.py md2word samples/mermaid_sample.md -o output/result.docx
 ```
 
-### Chuyen Markdown Sang Word
+Chuyen nhanh file Markdown trong `samples/`:
 
 ```bash
-python agi.py md2word samples/mermaid_sample.md
+python scripts/convert_samples.py
 ```
 
-Chi dinh file dau ra:
+Phan tich ma nguon:
 
 ```bash
-python agi.py md2word samples/mermaid_sample.md -o output/result.docx
+python src/security/source_code_analyzer.py .
 ```
 
-Neu file Markdown nam trong `samples/`, ban co the truyen truc tiep ten file:
+Quet web duoc uy quyen:
 
 ```bash
-python agi.py md2word mermaid_sample.md
+python src/security/web_security_scanner.py https://example.com
 ```
 
-### Dung Script Chuyen Doi Nhanh
+Tu dong dien Google Form:
 
 ```bash
-python convert.py
+python toolkit.py autofill -n 10
 ```
 
-Script nay liet ke cac file `.md` trong `samples/` va giup chuyen sang `.docx`.
-
-### Tu Dong Dien Google Form
-
-```bash
-python agi.py autofill -n 10
-```
-
-Chi dung tinh nang nay voi form ma ban co quyen dien. Cau hinh URL va danh sach cau tra loi trong `src/autoFill_form.py` truoc khi chay.
-
-### Xem Thong Tin Cong Cu
-
-```bash
-python agi.py info
-```
+Chi dung cac cong cu tu dong hoa va bao mat voi he thong, website, form hoac mang ma ban so huu hoac co quyen kiem thu ro rang.
 
 ## Cau Truc Du An
 
 ```text
 .
-|-- agi.py
-|-- agi.bat
-|-- convert.py
+|-- toolkit.py
+|-- toolkit.bat
 |-- requirements.txt
 |-- config/
 |-- docs/
-|-- output/
 |-- samples/
+|-- scripts/
 `-- src/
-    |-- agi_cli.py
-    |-- autoFill_form.py
+    |-- toolkit_cli.py
     |-- md2word.py
-    `-- quickstart.py
-```
-
-## Ghi Chu Mermaid
-
-Cong cu Markdown to Word se thu render Mermaid diagram theo thu tu:
-
-1. Dung `mmdc` neu may da cai Mermaid CLI.
-2. Dung Mermaid Ink online API neu co internet.
-3. Neu ca hai cach tren khong kha dung, nhung source Mermaid vao Word kem link `mermaid.live`.
-
-Neu muon cai Mermaid CLI:
-
-```bash
-npm install -g @mermaid-js/mermaid-cli
+    |-- autoFill_form.py
+    |-- quickstart.py
+    `-- security/
+        |-- source_code_analyzer.py
+        |-- web_security_scanner.py
+        `-- advanced_wifi_analyzer.py
 ```
 
 ## Tai Lieu Them
 
-- `docs/MERMAID_GUIDE.md`: huong dan Mermaid
-- `docs/PROJECT_STRUCTURE.md`: cau truc du an
-- `samples/`: cac file Markdown mau
-
-## License
-
-Du an duoc cung cap cho muc dich hoc tap va tu dong hoa co uy quyen.
+- `docs/MERMAID_GUIDE.md`: huong dan Mermaid trong Markdown.
+- `docs/SECURITY_TOOLS_GUIDE.txt`: huong dan chi tiet cho analyzer bao mat.
+- `docs/PROJECT_STRUCTURE.md`: cau truc du an.

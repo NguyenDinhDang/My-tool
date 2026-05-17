@@ -1,6 +1,6 @@
 # Huong Dan Su Dung Mermaid Diagrams
 
-AGI CLI co the chuyen Mermaid diagram trong Markdown sang hinh anh trong file Word.
+Security Automation Toolkit co the chuyen Mermaid diagram trong Markdown sang hinh anh trong file Word.
 
 ## Cach Viet Diagram
 
@@ -17,13 +17,13 @@ flowchart TD
 ## Chuyen Sang Word
 
 ```bash
-python agi.py md2word samples/mermaid_sample.md
+python toolkit.py md2word samples/mermaid_sample.md
 ```
 
 Chi dinh file dau ra:
 
 ```bash
-python agi.py md2word samples/mermaid_sample.md -o output/diagram.docx
+python toolkit.py md2word samples/mermaid_sample.md -o output/diagram.docx
 ```
 
 ## Cach Render

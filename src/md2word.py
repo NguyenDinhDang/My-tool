@@ -258,7 +258,7 @@ def _render_mermaid_with_ink(mermaid_code, output_png):
 
     encoded = base64.urlsafe_b64encode(mermaid_code.encode('utf-8')).decode('ascii')
     url = f'https://mermaid.ink/img/{encoded}?type=png&bgColor=transparent'
-    request = urllib.request.Request(url, headers={'User-Agent': 'AGI-md2word/1.0'})
+    request = urllib.request.Request(url, headers={'User-Agent': 'SecurityAutomationToolkit-md2word/1.0'})
 
     with urllib.request.urlopen(request, timeout=8) as response:
         image_data = response.read()

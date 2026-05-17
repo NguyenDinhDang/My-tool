@@ -1,6 +1,7 @@
 import time
 import random
 import sys
+import argparse
 
 try:
     import undetected_chromedriver as uc
@@ -13,7 +14,7 @@ except ImportError:
     sys.exit(1)
 
 # Cấu hình data
-responses = [
+DEFAULT_RESPONSES = [
     "Mình muốn thử cà phê lạnh vì thấy mọi người hay uống.",
     "Chắc là cà phê ngọt một chút cho dễ uống.",
     "Mình cũng không rõ, có gì mới thì thử thôi.",
@@ -36,8 +37,59 @@ responses = [
     "Không có yêu cầu gì đặc biệt, uống được là được."
 ]
 
-FORM_URL = "your-form-url-here"  # Thay bằng URL của Google Form bạn muốn điền
-NUM_SUBMISSIONS = 27   # Số lượng form bạn muốn điền tự động
+DEFAULT_NUM_SUBMISSIONS = 1
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Tu dong dien Google Form voi link va cau tra loi nhap tu CLI."
+    )
+    parser.add_argument("-u", "--url", help="Link Google Form can dien.")
+    parser.add_argument(
+        "-a",
+        "--answer",
+        action="append",
+        dest="answers",
+        help="Cau tra loi ngan. Co the truyen nhieu lan: -a 'Tra loi 1' -a 'Tra loi 2'.",
+    )
+    parser.add_argument("-c", "--count", type=int, help="So lan gui form.")
+    return parser.parse_args()
+
+def prompt_form_url(current_url=None):
+    while not current_url:
+        current_url = input("Nhap link Google Form: ").strip()
+        if not current_url:
+            print("Link khong duoc de trong.")
+    return current_url
+
+def prompt_submission_count(current_count=None):
+    if current_count is not None:
+        if current_count < 1:
+            raise ValueError("So lan gui form phai lon hon hoac bang 1.")
+        return current_count
+
+    raw_count = input(f"Nhap so lan gui form [{DEFAULT_NUM_SUBMISSIONS}]: ").strip()
+    if not raw_count:
+        return DEFAULT_NUM_SUBMISSIONS
+
+    count = int(raw_count)
+    if count < 1:
+        raise ValueError("So lan gui form phai lon hon hoac bang 1.")
+    return count
+
+def prompt_answers(current_answers=None):
+    answers = [answer.strip() for answer in current_answers or [] if answer.strip()]
+    if answers:
+        return answers
+
+    print("Nhap cac cau tra loi ngan, moi cau mot dong.")
+    print("Bam Enter tren dong trong de ket thuc. Neu bo trong se dung danh sach mac dinh.")
+    while True:
+        answer = input(f"Cau tra loi {len(answers) + 1}: ").strip()
+        if not answer:
+            break
+        answers.append(answer)
+
+    return answers or DEFAULT_RESPONSES
 
 def human_type(element, text):
     """Giả lập gõ phím như người thật để tránh bot detection"""
@@ -55,7 +107,7 @@ def setup_driver():
     driver = uc.Chrome(options=options, version_main=147)
     return driver
 
-def fill_form(driver):
+def fill_form(driver, responses):
     wait = WebDriverWait(driver, 15)
     
     # 1. Chọn giới tính (70% Nam/Nữ, 30% Khác)
@@ -166,20 +218,29 @@ def fill_form(driver):
         return False
 
 def main():
+    args = parse_args()
+    try:
+        form_url = prompt_form_url(args.url)
+        num_submissions = prompt_submission_count(args.count)
+        responses = prompt_answers(args.answers)
+    except ValueError as e:
+        print(f"Loi cau hinh: {e}")
+        sys.exit(1)
+
     print("Đang khởi tạo Browser...")
     driver = setup_driver()
-    driver.get(FORM_URL)
+    driver.get(form_url)
     
-    for i in range(NUM_SUBMISSIONS):
+    for i in range(num_submissions):
         print(f"Đang điền form lần thứ {i + 1}...")
         time.sleep(random.uniform(1.5, 3.0)) # Chờ trang load ổn định
         
-        success = fill_form(driver)
+        success = fill_form(driver, responses)
         if success:
             print(f"    [OK] Gửi thành công lần {i + 1}")
         else:
             print(f"    [!] Gửi thất bại, tải lại trang để thử lại...")
-            driver.get(FORM_URL)
+            driver.get(form_url)
             
         # Thêm biến thời gian ngủ cực kỳ quan trọng để lách Bot Limit của Google Form
         sleep_time = random.uniform(2.5, 5.5)

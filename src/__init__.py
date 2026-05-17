@@ -1,5 +1,3 @@
-"""
-AGI - Automation & Conversion CLI Tools Package
-"""
+"""Security Automation Toolkit package."""
 
 __version__ = "1.0.0"

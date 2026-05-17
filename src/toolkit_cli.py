@@ -13,12 +13,12 @@ from md2word import convert_md_to_docx
 
 
 @click.group()
-@click.version_option(version="1.0.0", prog_name="AGI")
+@click.version_option(version="1.0.0", prog_name="Security Automation Toolkit")
 def cli():
     """
-     AGI - Your Automation & Conversion Tools
+     Security Automation Toolkit
     
-    A powerful CLI application for automating tasks and converting documents.
+    Utilities for authorized security checks, document conversion, and automation.
     """
     pass
 
@@ -38,8 +38,8 @@ def md2word(markdown_file, output):
     with support for headings, code blocks, Mermaid diagrams, tables, links, and more.
     
     Example:
-        agi md2word samples/document.md
-        agi md2word samples/document.md -o output/result.docx
+        toolkit md2word samples/document.md
+        toolkit md2word samples/document.md -o output/result.docx
     """
     try:
         # Get project root directory
@@ -94,8 +94,8 @@ def autofill(submissions):
     WARNING: Only use this on forms you have permission to fill!
     
     Example:
-        agi autofill
-        agi autofill -n 50
+        toolkit autofill
+        toolkit autofill -n 50
     """
     try:
         # Modify NUM_SUBMISSIONS in autoFill_form.py temporarily
@@ -119,24 +119,32 @@ def info():
     """
     click.echo("""
 
-                    AGI - Tools Overview                      
+                    Security Automation Toolkit - Tools Overview
 
 
  Markdown to Word (md2word)
     Converts .md files to professional .docx documents
     Supports: headings, Mermaid diagrams, code blocks, tables, links, formatting
-    Usage: agi md2word <file.md> [-o output.docx]
+    Usage: python toolkit.py md2word <file.md> [-o output.docx]
 
  Auto-Fill Form (autofill)
     Automatically fills Google Forms with random responses
     Uses undetected Chrome + human-like typing
     Bypasses bot detection mechanisms
-    Usage: agi autofill [-n number_of_submissions]
+    Usage: python toolkit.py autofill [-n number_of_submissions]
 
 
 
-For more help: agi --help
-For command help: agi <command> --help
+ Security tools
+    Source code analyzer:
+      python src/security/source_code_analyzer.py <project-path>
+    Web security scanner:
+      python src/security/web_security_scanner.py <url>
+    WiFi analyzer:
+      python src/security/advanced_wifi_analyzer.py
+
+For more help: python toolkit.py --help
+For command help: python toolkit.py <command> --help
     """)
 
 

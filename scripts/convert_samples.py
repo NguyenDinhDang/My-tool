@@ -5,22 +5,21 @@ Simple script to convert any markdown file in samples/ folder
 """
 
 import os
+import subprocess
 import sys
 from pathlib import Path
 
-# Add src to path
-src_path = os.path.join(os.path.dirname(__file__), 'src')
-sys.path.insert(0, src_path)
-
-from agi_cli import cli
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, 'reconfigure'):
+        stream.reconfigure(encoding='utf-8', errors='replace')
 
 def main():
     """List markdown files in samples/ and convert"""
-    samples_dir = os.path.join(os.path.dirname(__file__), 'samples')
-    output_dir = os.path.join(os.path.dirname(__file__), 'output')
+    root_dir = Path(__file__).resolve().parents[1]
+    samples_dir = root_dir / 'samples'
     
     # Find all .md files
-    md_files = list(Path(samples_dir).glob('*.md'))
+    md_files = list(samples_dir.glob('*.md'))
     
     if not md_files:
         print(" Không có file .md nào trong thư mục samples/")
@@ -35,7 +34,7 @@ def main():
         # Auto-convert single file
         file_name = md_files[0].name
         print(f"\n Chuyển đổi: {file_name}")
-        os.system(f'python agi.py md2word samples/{file_name}')
+        subprocess.run([sys.executable, str(root_dir / "toolkit.py"), "md2word", f"samples/{file_name}"], timeout=90, check=False)
     else:
         # Let user choose
         print(f"\n Nhập số file để chuyển (1-{len(md_files)}): ", end='')
@@ -44,7 +43,7 @@ def main():
             if 0 <= choice < len(md_files):
                 file_name = md_files[choice].name
                 print(f"\n Chuyển đổi: {file_name}")
-                os.system(f'python agi.py md2word samples/{file_name}')
+                subprocess.run([sys.executable, str(root_dir / "toolkit.py"), "md2word", f"samples/{file_name}"], timeout=90, check=False)
             else:
                 print(" Lựa chọn không hợp lệ")
         except ValueError:
