@@ -4,19 +4,19 @@
 
 ### Cú pháp cơ bản:
 ```bash
-python src/security/source_code_analyzer.py <duong-dan-thu-muc>
+python app_security/source_code_analyzer.py <duong-dan-thu-muc>
 ```
 
 ### Ví dụ:
 ```bash
 # Scan thư mục hiện tại
-python src/security/source_code_analyzer.py .
+python app_security/source_code_analyzer.py .
 
-# Scan thư mục cụ thể
-python src/security/source_code_analyzer.py C:\MyProject
+# Scan thư mục dự án mục tiêu
+python app_security/source_code_analyzer.py ./my_project
 
 # Scan từ đường dẫn tương đối
-python src/security/source_code_analyzer.py ..\..\src
+python app_security/source_code_analyzer.py ../src
 ```
 
 ## 2. KẾT QUẢ SCANNER
@@ -32,7 +32,7 @@ Sau khi chạy, bạn sẽ nhận được:
 ```
 sast_report.json
 ```
-Chứa tất cả chi tiết về các lỗ hổng (có thể mở với text editor hoặc Excel)
+Chứa tất cả chi tiết về các lỗ hổng (có thể mở với text editor hoặc Excel).
 
 ## 3. CÁC LOẠI LỖ HỔNG ĐƯỢC PHÁT HIỆN
 
@@ -63,71 +63,39 @@ Chứa tất cả chi tiết về các lỗ hổng (có thể mở với text ed
 ```
 
 Giải thích:
-- **[1]**: Số thứ tự vấn đề
-- **Hardcoded secrets/credentials**: Loại lỗ hổng
-- **File**: test_vulnerable.py:12 = File "test_vulnerable.py" dòng 12
-- **Issue**: Mô tả lỗi cụ thể
-- **Code**: Dòng code bị lỗi
+- `[1]`: Số thứ tự của lỗi
+- `Hardcoded secrets/credentials`: Loại lỗi
+- `File: test_vulnerable.py:12`: Lỗi ở file nào, dòng số mấy
+- `Issue: Hardcoded password`: Mô tả chi tiết
+- `Code: ...`: Dòng code gây ra lỗi
 
-### JSON Report Structure:
-```json
-{
-  "project_path": ".",
-  "files_scanned": 4,
-  "total_issues": 66,
-  "summary": {
-    "critical": 7,
-    "high": 7,
-    "medium": 52,
-    "low": 0
-  },
-  "vulnerabilities": [
-    {
-      "type": "hardcoded_secrets",
-      "severity": "CRITICAL",
-      "description": "Hardcoded secrets/credentials",
-      "detail": "Hardcoded password",
-      "file": "test_vulnerable.py",
-      "line": 12,
-      "code": "database_password = \"MySecurePassword123\""
-    }
-  ]
-}
-```
+## 5. CÁC FILE ĐƯỢC SCAN
 
-## 5. CÁC FILE ĐƯỢC QUÉT
+Scanner tự động tìm và scan:
+- Python (`.py`)
+- JavaScript/TypeScript (`.js`, `.jsx`, `.ts`, `.tsx`)
+- PHP (`.php`)
+- Java (`.java`)
+- Configuration (`.env`, `.json`, `.yaml`, `.yml`, `.xml`, `.ini`, `.conf`)
 
-Scanner sẽ quét các file code sau:
-- Python: .py
-- JavaScript: .js, .jsx, .ts, .tsx
-- PHP: .php
-- Java: .java
-- Ruby: .rb
-- Go: .go
-- C#: .cs
-- C/C++: .cpp, .c, .h
-- Vue: .vue
-- SQL: .sql
-- Shell: .sh, .bash
+## 6. CÁC THƯ MỤC BỊ BỎ QUA (IGNORE)
 
-## 6. CÁC THƯMỤC ĐƯỢC BỎ QUA
-
-Những thư mục này sẽ không được scan (giúp tăng tốc độ):
-- node_modules (npm packages)
-- venv, env (Python virtual environments)
-- .git (Git repository)
-- __pycache__ (Python cache)
-- dist, build (Build artifacts)
-- vendor (Composer packages)
+Scanner tự động bỏ qua:
+- `.git` (Git metadata)
+- `node_modules` (NPM packages)
+- `venv`, `.venv`, `env` (Python virtual environments)
+- `__pycache__` (Python cache)
+- `dist`, `build` (Build artifacts)
+- `vendor` (Composer packages)
 
 ## 7. VÍ DỤ: SCAN TOÀN BỘ PROJECT
 
 ```bash
-cd C:\MyProject
-python C:\path\to\src\security\source_code_analyzer.py .
+cd ./my_project
+python ../app_security/source_code_analyzer.py .
 ```
 
-Output:
+Output mẫu:
 ```
 ========================================
   Source Code Security Analyzer v1.0
@@ -169,7 +137,6 @@ RECOMMENDATIONS
 ## 8. HÀNH ĐỘNG TIẾP THEO
 
 ### Nếu tìm được lỗ hổng:
-
 1. **CRITICAL Issues**: Sửa ngay lập tức (nguy hiểm cao)
 2. **HIGH Issues**: Sửa trong sprint hiện tại
 3. **MEDIUM/LOW Issues**: Lập kế hoạch sửa
@@ -188,7 +155,7 @@ RECOMMENDATIONS
 - name: Run Security Scanner
   run: |
     pip install colorama beautifulsoup4
-    python src/security/source_code_analyzer.py .
+    python app_security/source_code_analyzer.py .
 ```
 
 ### GitLab CI example:
@@ -197,7 +164,7 @@ security_scan:
   stage: test
   script:
     - pip install colorama beautifulsoup4
-    - python src/security/source_code_analyzer.py .
+    - python app_security/source_code_analyzer.py .
   artifacts:
     reports:
       sast: sast_report.json
@@ -205,4 +172,4 @@ security_scan:
 
 ---
 
-**Chú ý**: Đây là static analysis tool, nó scan patterns trong code, không phải runtime testing. Cần kiểm tra thủ công để xác nhận.
+**Chú ý**: Đây là static analysis tool, scan patterns trong code, phục vụ giáo dục và phòng thủ an toàn thông tin.
