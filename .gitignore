@@ -6,7 +6,7 @@ config/secrets.json
 config/*.key
 config/*.pem
 
-# Python
+# Python byte-code and caches
 __pycache__/
 *.py[cod]
 *$py.class
@@ -30,7 +30,7 @@ out/
 site/
 *.egg
 
-# Runtime output
+# Runtime outputs, logs, and databases
 logs/
 *.log
 tmp/
@@ -38,15 +38,19 @@ temp/
 .cache/
 output/
 uploads/
-
-# Databases and generated reports
+capture.db
 *.db
 *.db-journal
 *.sqlite
 *.sqlite3
+*-wal
+*-shm
+sast_report.json
+report_*.html
+report_*.json
 *_report.json
 
-# Node/frontend tooling, if added later
+# Node/frontend tooling
 node_modules/
 dist-ssr/
 *.local
@@ -54,10 +58,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
 # Editors and OS files
-.vscode/*
+.vscode/
 !.vscode/extensions.json
 .idea/
 *.suo
@@ -69,3 +72,4 @@ lerna-debug.log*
 *.swo
 .DS_Store
 Thumbs.db
+~$*
