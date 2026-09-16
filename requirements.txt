@@ -1,8 +1,25 @@
-click>=8.0.0
-python-docx>=0.8.10
-selenium>=4.0.0
-undetected-chromedriver>=3.0.0
+# ==============================================================================
+# Security Automation Toolkit & Defensive Security Suite - Dependencies
+# Python >= 3.10 required
+# ==============================================================================
+
+# Core CLI & Terminal Output
+click>=8.1.0
+colorama>=0.4.6
+
+# Web Security & Crawling
 requests>=2.31.0
 beautifulsoup4>=4.12.0
-colorama>=0.4.6
+
+# Web Automation & Testing
+selenium>=4.15.0
+
+# Document Processing & Conversion
+python-docx>=0.8.10
+
+# Network Packet & Protocol Analysis (Windows requires Npcap)
 scapy>=2.5.0
+
+# Development & Automated Testing
+pytest>=8.0.0
+pytest-asyncio>=0.23.0
