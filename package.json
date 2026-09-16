@@ -1,0 +1,27 @@
+{
+  "name": "agi",
+  "version": "1.0.0",
+  "description": "Bo cong cu Python cho cac tac vu kiem tra bao mat co uy quyen, chuyen doi tai lieu va tu dong hoa noi bo.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NguyenDinhDang/My-tool.git"
+  },
+  "keywords": [],
+  "author": "Đặng Đình Nguyên",
+  "license": "MIT",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/NguyenDinhDang/My-tool/issues"
+  },
+  "homepage": "https://github.com/NguyenDinhDang/My-tool#readme",
+  "dependencies": {
+    "docx": "^9.6.1"
+  }
+}
