@@ -1,4 +1,4 @@
-﻿import click
+import click
 import sys
 import os
 from pathlib import Path
@@ -16,7 +16,7 @@ from md2word import convert_md_to_docx
 @click.version_option(version="1.0.0", prog_name="Security Automation Toolkit")
 def cli():
     """
-     Security Automation Toolkit
+    Security Automation Toolkit
     
     Utilities for authorized security checks, document conversion, and automation.
     """
@@ -32,7 +32,7 @@ def cli():
 )
 def md2word(markdown_file, output):
     """
-     Convert Markdown to Word Document
+    Convert Markdown to Word Document
     
     Converts a Markdown file to a professionally formatted Word (.docx) document
     with support for headings, code blocks, Mermaid diagrams, tables, links, and more.
@@ -75,40 +75,44 @@ def md2word(markdown_file, output):
 
 @cli.command()
 @click.option(
+    '--url', '-u',
+    type=str,
+    default=None,
+    help='Link Google Form cần điền (vd: https://docs.google.com/forms/d/e/.../viewform)'
+)
+@click.option(
     '--submissions', '-n',
     type=int,
-    default=27,
-    help='Number of form submissions (default: 27)'
+    default=1,
+    help='Số lần gửi form (mặc định: 1)'
+)
+@click.option(
+    '--answer', '-a',
+    'answers',
+    multiple=True,
+    help='Câu trả lời tùy chỉnh (có thể truyền nhiều lần: -a "Trả lời 1" -a "Trả lời 2")'
 )
 @click.confirmation_option(
-    prompt='  This will auto-fill a Google Form. Continue?',
-    help='Confirm before starting auto-fill'
+    prompt='  Xác nhận bắt đầu tự động điền Google Form?',
+    help='Xác nhận trước khi chạy'
 )
-def autofill(submissions):
+def autofill(url, submissions, answers):
     """
-     Auto-Fill Google Form
+    Auto-Fill Google Form
     
-    Automatically fills out a Google Form with random responses.
-    Uses advanced techniques to bypass bot detection.
+    Tự động điền Google Form bằng Selenium với đường dẫn tùy chọn.
     
-    WARNING: Only use this on forms you have permission to fill!
-    
-    Example:
-        toolkit autofill
-        toolkit autofill -n 50
+    Ví dụ:
+        python toolkit.py autofill -u "https://docs.google.com/forms/d/e/.../viewform"
+        python toolkit.py autofill -u "https://docs.google.com/forms/d/e/.../viewform" -n 10
     """
     try:
-        # Modify NUM_SUBMISSIONS in autoFill_form.py temporarily
-        import autoFill_form
-        original_num = autoFill_form.NUM_SUBMISSIONS
-        autoFill_form.NUM_SUBMISSIONS = submissions
-        
-        click.echo(f"Starting auto-fill with {submissions} submissions...")
-        autofill_main()
-        click.echo(f"All {submissions} submissions completed!")
-        
+        from autoFill_form import run_autofill
+        click.echo(f"Bắt đầu tự động điền ({submissions} lần gửi)...")
+        run_autofill(url=url, count=submissions, answers=list(answers) if answers else None)
+        click.echo(f"Hoàn thành {submissions} lần gửi form!")
     except Exception as e:
-        click.echo(f" Error: {str(e)}", err=True)
+        click.echo(f" Lỗi: {str(e)}", err=True)
         sys.exit(1)
 
 
@@ -118,9 +122,7 @@ def info():
     Display information about available tools
     """
     click.echo("""
-
                     Security Automation Toolkit - Tools Overview
-
 
  Markdown to Word (md2word)
     Converts .md files to professional .docx documents
@@ -128,20 +130,20 @@ def info():
     Usage: python toolkit.py md2word <file.md> [-o output.docx]
 
  Auto-Fill Form (autofill)
-    Automatically fills Google Forms with random responses
-    Uses undetected Chrome + human-like typing
-    Bypasses bot detection mechanisms
+    Automatically fills Google Forms with responses
+    Uses standard Selenium Chrome
     Usage: python toolkit.py autofill [-n number_of_submissions]
 
-
-
- Security tools
-    Source code analyzer:
-      python src/security/source_code_analyzer.py <project-path>
-    Web security scanner:
-      python src/security/web_security_scanner.py <url>
-    WiFi analyzer:
-      python src/security/advanced_wifi_analyzer.py
+ Security tools:
+    Web security scanner (All-in-One):
+      python security_scanner.py <url>
+      (hoặc: python app_security/web_security_scanner.py <url>)
+    Source code analyzer (SAST):
+      python app_security/source_code_analyzer.py <project-path>
+    WiFi & Network analyzer:
+      python network/advanced_wifi_analyzer.py
+    USB Security Scanner:
+      python system/usb_scanner_windows.py <drive-letter>
 
 For more help: python toolkit.py --help
 For command help: python toolkit.py <command> --help

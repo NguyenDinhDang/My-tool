@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 """
 Security Automation Toolkit Quick Start Guide
 
@@ -18,7 +18,7 @@ def show_banner():
                                                                
                    Security Automation Toolkit                 
                                                                
-               Security, Automation & Conversion Tools v1.0    
+                Security, Automation & Conversion Tools v1.0    
                                                                
     
     """
@@ -33,7 +33,6 @@ def check_dependencies():
         "click": "CLI Framework",
         "docx": "Word Document Support (python-docx)",
         "selenium": "Web Automation",
-        "undetected_chromedriver": "Anti-Bot Chrome Driver",
     }
     
     missing = []
@@ -68,8 +67,10 @@ def show_usage_examples():
         python toolkit.py md2word document.md -o output.docx
     
     2  Auto-Fill Google Form:
-        python toolkit.py autofill
-        python toolkit.py autofill -n 50
+        python toolkit.py autofill -u "https://docs.google.com/forms/d/e/.../viewform"
+        python toolkit.py autofill -u "https://docs.google.com/forms/d/e/.../viewform" -n 5
+        # Hoặc chạy trực tiếp:
+        python src/autoFill_form.py -u "https://docs.google.com/forms/d/e/.../viewform" -c 5
     
     3  View Available Tools:
         python toolkit.py info
@@ -77,6 +78,7 @@ def show_usage_examples():
     4  Get Help:
         python toolkit.py --help
         python toolkit.py [command] --help
+    
     
     """
     click.echo(examples)
